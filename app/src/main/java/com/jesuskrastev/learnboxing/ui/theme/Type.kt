@@ -10,9 +10,13 @@ import com.jesuskrastev.learnboxing.R
 @Composable
 fun PoppinsTypography() = Typography().run {
     val fontFamily = FontFamily(
-        Font(R.font.poppins_regular, weight = FontWeight.Light),
-        Font(R.font.poppins_bold, weight = FontWeight.Normal),
+        Font(R.font.poppins_extra_light, weight = FontWeight.ExtraLight),
+        Font(R.font.poppins_light, weight = FontWeight.Light),
+        Font(R.font.poppins_regular, weight = FontWeight.Normal),
         Font(R.font.poppins_medium, weight = FontWeight.Medium),
+        Font(R.font.poppins_semi_bold, weight = FontWeight.SemiBold),
+        Font(R.font.poppins_bold, weight = FontWeight.Bold),
+        Font(R.font.poppins_extra_bold, weight = FontWeight.ExtraBold),
     )
 
     this.copy(
