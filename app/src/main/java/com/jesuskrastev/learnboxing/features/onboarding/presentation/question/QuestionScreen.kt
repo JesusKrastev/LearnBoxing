@@ -1,4 +1,4 @@
-package com.jesuskrastev.learnboxing.features.onboarding.presentation.experience
+package com.jesuskrastev.learnboxing.features.onboarding.presentation.question
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -7,7 +7,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
@@ -16,36 +19,55 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import kotlin.random.Random
+import com.jesuskrastev.learnboxing.features.onboarding.domain.question.QuestionState
 
 @Composable
-fun ExperienceScreen(
+fun QuestionScreen(
     modifier: Modifier = Modifier,
+    questionState: QuestionState,
 ) {
     Column(
         modifier = modifier.padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
-        Text(
-            text = "Do you have any previous boxing experience?",
-            fontWeight = FontWeight.ExtraBold,
-            style = MaterialTheme.typography.titleLarge
+        Question(
+            text = questionState.question,
         )
-        repeat(3) {
-            ExperienceCard(
-                text = "I've never trained",
-                selected = Random.nextBoolean(),
-                onClick = {}
-            )
+        LazyColumn(
+            modifier = Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
+            items(questionState.answers) { answer ->
+                OptionCard(
+                    text = answer.answer,
+                    selected = answer.selected,
+                    onClick = {},
+                    isMultipleChoice = questionState.isMultipleChoice,
+                )
+            }
         }
     }
 }
 
 @Composable
-fun ExperienceCard(
+fun Question(
+    modifier: Modifier = Modifier,
+    text: String,
+) {
+    Text(
+        modifier = modifier,
+        text = text,
+        fontWeight = FontWeight.ExtraBold,
+        style = MaterialTheme.typography.titleLarge
+    )
+}
+
+@Composable
+fun OptionCard(
     text: String,
     selected: Boolean,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    isMultipleChoice: Boolean,
 ) {
     Row(
         modifier = Modifier
@@ -59,19 +81,21 @@ fun ExperienceCard(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        ExperienceDetails(
+        OptionDetails(
             text = text,
             selected = selected,
             onClick = onClick,
+            isMultipleChoice = isMultipleChoice,
         )
     }
 }
 
 @Composable
-fun ExperienceDetails(
+fun OptionDetails(
     modifier: Modifier = Modifier,
     text: String,
     selected: Boolean,
+    isMultipleChoice: Boolean,
     onClick: () -> Unit,
 ) {
     Row(
@@ -84,18 +108,24 @@ fun ExperienceDetails(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        ExperienceLabel(
+        OptionLabel(
             text = text,
         )
-        RadioButton(
-            selected = selected,
-            onClick = onClick,
-        )
+        if(isMultipleChoice)
+            Checkbox(
+                checked = selected,
+                onCheckedChange = { onClick() },
+            )
+        else
+            RadioButton(
+                selected = selected,
+                onClick = onClick,
+            )
     }
 }
 
 @Composable
-fun ExperienceLabel(
+fun OptionLabel(
     modifier: Modifier = Modifier,
     text: String,
 ) {
