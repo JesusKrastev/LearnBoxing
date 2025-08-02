@@ -58,5 +58,7 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 
     // Splash screen
-    implementation("androidx.core:core-splashscreen:1.0.1")
+    implementation(libs.core.splashscreen)
+    // Charts
+    implementation(libs.compose.charts)
 }
